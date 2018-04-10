@@ -119,6 +119,30 @@ class Bot:
             'text': message
         }, notification_type)
 
+    def send_quick_reply(self, recipient_id, message, replyes, notification_type=NotificationType.regular):
+        """Send quick reply to the specified recipient. Only text.
+        https://developers.facebook.com/docs/messenger-platform/reference/send-api/quick-replies/
+        Input:
+            recipient_id: recipient id to send to
+            message: message to send
+            replyes: array with replyes to send
+        Output:
+            Response from API as <dict>
+        """
+        formated_reply= []
+        for x in replyes:
+            repl = {
+                "content_type": "text",
+                "title": x,
+                "payload": "<POSTBACK_PAYLOAD>",
+            }
+            formated_reply.append(repl)
+
+        return self.send_message(recipient_id, {
+            'text': message,
+            "quick_replies": formated_reply
+        }, notification_type)
+
     def send_generic_message(self, recipient_id, elements, notification_type=NotificationType.regular):
         """Send generic messages to the specified recipient.
         https://developers.facebook.com/docs/messenger-platform/send-api-reference/generic-template
